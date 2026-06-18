@@ -22,6 +22,24 @@ export const obtenerUnPersonajePorId = (req, res) => {
 
     return res.status(200).json(personaje);
 };
-export const crearUnPersonaje = (req, res) => {};
+export const crearUnPersonaje = (req, res) => {
+   const { nombre, imagen } = req.body;
+   
+   if (!nombre || !imagen) {
+    return res.status(400).json({
+        message: "Los campos nombre e imagen son obligatorios",
+    });
+   }
+
+   const nuevoId = personajes.length > 0 ? Math.max(...personajes.map((p) => p.id)) + 1 : 1;
+
+   const nuevoPersonaje = {id: nuevoId, nombre, imagen};
+   personajes.push(nuevoPersonaje);
+
+   return res.status(201).json({
+    messaje: "Personaje creado correctamente",
+    personaje: nuevoPersonaje,
+   })
+};
 export const editarUnPersonaje = (req, res) => {};
 export const eliminarUnPersonaje = (req, res) => {};
