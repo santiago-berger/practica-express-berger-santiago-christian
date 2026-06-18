@@ -79,4 +79,25 @@ export const editarUnPersonaje = (req, res) => {
         personaje: personajes[indice],
     })
 };
-export const eliminarUnPersonaje = (req, res) => {};
+export const eliminarUnPersonaje = (req, res) => {
+    const id = Number(req.params.id);
+
+    if (Number.isNaN(id)) {
+        return res.status(400).json({message: "El id debe ser un numero valido"});
+    }
+
+    const indice = personajes.findIndex((p) => p.id === id);
+
+    if (indice === -1) {
+        return res.status(404).json({
+            message: `No se encontro el personaje con el id #${id}`,
+        })
+    }
+
+    const eliminado = personajes.splice(indice, 1)[0];
+
+    return res.status(200).json({
+        message: "Personaje eliminado correctamente",
+        personaje: eliminado,
+    })
+};
