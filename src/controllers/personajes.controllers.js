@@ -41,5 +41,42 @@ export const crearUnPersonaje = (req, res) => {
     personaje: nuevoPersonaje,
    })
 };
-export const editarUnPersonaje = (req, res) => {};
+export const editarUnPersonaje = (req, res) => {
+    const id = Number(req.params.id);
+
+    if (Number.isNaN(id)) {
+        return res.status(400).json({message: "El id debe ser un número valido"})
+    }
+
+    const datos = req.body;
+
+    if (Object.keys(datos).lenght === 0) {
+        return res.status(400).json({
+            message: "Debe enviar al menos un campo para actualizar",
+        })
+    }
+
+    const hayCamposVacios = Object.values(datos).some((valor) => valor === "");
+    if (hayCamposVacios) {
+        return res.status(400).json({
+            message: "Los campos enviados no pueden estar vacios"
+        })
+    }
+
+    const indice = personajes.findIndex((p) => p.id === id);
+
+    if (indice === -1) {
+        return res.status(404).json({
+            message: `No se encontró el personaje con el id #${id}`,
+        })
+    }
+
+    if (datos.nombre) personajes[indice].nombre = datos.nombre;
+    if (datos.imagen) personajes[indice].imagen = datos.imagen;
+
+    return res.status(200).json({
+        message: "Personaje editado correctamente",
+        personaje: personajes[indice],
+    })
+};
 export const eliminarUnPersonaje = (req, res) => {};
